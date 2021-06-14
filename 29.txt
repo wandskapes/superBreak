@@ -1,0 +1,261 @@
+#include <iostream>
+#include <fstream>
+#include <conio.h>
+#include <cstdlib>
+#include <string>
+#include <sstream>
+#include <Windows.h>
+#include <iomanip>
+
+using namespace std;
+
+string line;
+string filename = "session.txt";
+int k;
+
+class students {
+	int id;
+	string fam;
+	int math;
+	int engl;
+	int oaip;
+	int ttpo;
+	int hist;
+public:
+	students() {
+		id = math = engl = oaip = ttpo = hist = 0;
+		fam = "unknown";
+	}
+	students(int i,int m,int e,int o,int t,int h,string f) {
+		id = i;
+		math = m;
+		engl = e;
+		oaip = o;
+		ttpo = t;
+		hist = h;
+		fam = f;
+	}
+	int get_math()
+	{
+		return this->math;
+	}
+	int get_engl()
+	{
+		return this->engl;
+	}
+	int get_oaip()
+	{
+		return this->oaip;
+	}
+	int get_ttpo()
+	{
+		return this->ttpo;
+	}
+	int get_hist()
+	{
+		return this->hist;
+	}
+	int get_id()
+	{
+		return this->id;
+	}
+	string get_fam()
+	{
+		return this->fam;
+	}
+	void input(students* st);
+	void output(students* st);
+	void debtors(students* st);
+	void average_score(students* st);
+};
+
+void students::input(students* st) {
+	ofstream out;
+	out.open(filename);
+	if (!out.is_open()) {
+		cout << "Ошибка открытия файла" << endl;
+	}
+	else {
+		cout << "Файл открыт" << endl;
+		for (int i = 0; i < k; i++)
+		{
+			cout << "\nЗаполнение информации о " << i + 1 << "ом студенте" << endl;
+			cout << "Введите фамилию студента: ";
+			getline(cin, st[i].fam); getline(cin, st[i].fam);
+			out << st[i].fam << endl;
+
+			cout<<"Введите индекс группы: ";
+			cin >> st[i].id;
+			out << st[i].id <<endl;
+
+			cout<<"Введите отметку по математике: ";
+			cin >> st[i].math;
+			out << st[i].math <<endl;
+
+			cout<<"Введите отметку по английскому: ";
+			cin >> st[i].engl;
+			out << st[i].engl <<endl;
+
+			cout<<"Введите отметку по ОАиП: ";
+			cin >> st[i].oaip;
+			out << st[i].oaip <<endl;
+
+			cout<<"Введите отметку по ТТПО: ";
+			cin >> st[i].ttpo;
+			out << st[i].ttpo <<endl;
+
+			cout<<"Введите отметку по истории: ";
+			cin >> st[i].hist;
+			out << st[i].hist <<endl;
+
+		}
+		out.close();
+		cout << "Данные сохранены" << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void students::output(students* st) {
+	int i = 0;
+	ifstream in;
+	in.open(filename);
+	if (!in.is_open()) { cout << "Ошибка открытия файла" << endl; }
+	else {
+		while (!in.eof()&& i != k) {
+			cout << "\nСведения о " << i + 1 << "ом студенте " << endl;
+			line = "";
+			getline(in, line, '\n');
+			cout << "Фамилия: " << line << endl;
+
+			line = "";
+			getline(in, line, '\n');
+			cout << "Индекс группы: " << line << endl;
+
+			line = "";
+			getline(in, line, '\n');
+			cout << "Отметка по математике: " << line << endl;
+
+			line = "";
+			getline(in, line, '\n');
+			cout << "Отметка по английскому: " << line << endl;
+
+            line = "";
+			getline(in, line, '\n');
+			cout << "Отметка по ОАиП: " << line << endl;
+
+			line = "";
+			getline(in, line, '\n');
+			cout << "Отметка по ТТПО: " << line << endl;
+
+            line = "";
+			getline(in, line, '\n');
+			cout << "Отметка по истории: " << line << endl;
+
+			i++;
+		}
+	}
+	in.close();
+	system("pause");
+	system("cls");
+}
+
+void students::debtors(students* st) {
+	int count = 0;
+	for (int i = 0; i < k; i++)
+	{
+		if(st[i].get_math()<4)
+		count++;
+
+		if(st[i].get_engl()<4)
+		count++;
+
+		if(st[i].get_ttpo()<4)
+		count++;
+
+		if(st[i].get_hist()<4)
+		count++;
+
+        if(st[i].get_math()<4)
+		count++;
+
+		if(count>0)
+		{
+
+		cout<<st[i].fam<<st[i].id<<" -индекс группы"<<" кол-во задолженностей: "<<count<<endl;
+		count = 0;
+
+		}
+	}
+	system("pause");
+	system("cls");
+}
+
+void students::average_score(students* st) {
+	for(int i = 0;i<k;i++)
+	{
+
+	cout<<st[i].fam<<" средний балл: "<<(st[i].math+st[i].engl+st[i].oaip+st[i].ttpo+st[i].hist)/5<<endl;
+
+	}
+	system("pause");
+	system("cls");
+}
+
+void vizion() {
+	cout << "---------МЕНЮ-----------" << endl << endl;
+	cout << "1. Ввести данные в файл" << endl;
+	cout << "2. Вывести все данные на экран" << endl;
+	cout << "3. Вывести список задолжников" << endl;
+	cout << "4. Вывести средний балл" << endl;
+	cout << "0. Выйти из программы" << endl;
+}
+
+void menu() {
+	cout << "Введите кол-во студентов: ";
+	cin >> k;
+	students* st = new students[k];
+	int n;
+	system("cls");
+	vizion();
+	while (true) {
+		cout << "\nВыберите действие: ";
+		cin >> n;
+		switch (n) {
+		case 1: {
+			st->input(st);
+			vizion();
+			break;
+		}
+		case 2: {
+			st->output(st);
+			vizion();
+			break;
+		}
+		case 3: {
+			st->debtors(st);
+			vizion();
+			break;
+		}
+		case 4: {
+			st->average_score(st);
+			vizion();
+			break;
+		}
+		case 0: {
+			exit(1); break;
+		}
+		default:
+			cout << "Такого действия нет" << endl;
+			break;
+		}
+	}
+	delete[]st;
+}
+
+int main() {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	menu();
+	system("pause");
+}
